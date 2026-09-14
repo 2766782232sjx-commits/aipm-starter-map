@@ -186,6 +186,21 @@ export default function Concepts() {
             </p>
           </Note>
         </div>
+        <div className="mt-6">
+          <p className="mb-3 text-sm font-semibold text-zinc-800">幻觉的四种缓解方案（面试题「怎么解决幻觉」的满分框架）</p>
+          <Table
+            head={["方案", "一句话原理", "适合什么", "局限"]}
+            rows={[
+              ["RAG", "回答前先查资料，基于资料作答", "知识时效性强、企业私有知识", "检索不到照样编；效果上限被检索质量锁死"],
+              ["Prompt 约束", "指令里要求「不知道就说不知道」「给出依据」", "零成本，所有场景的第一步", "靠模型自觉，压不住高置信度的瞎编"],
+              ["SFT 微调", "用「诚实作答/该拒就拒」的样本训练，改变行为习惯", "行为模式要求稳定的场景", "成本高、周期长，可能损伤通用能力"],
+              ["调低 Temperature", "降低采样随机性，让模型选更「保守」的词", "事实型、答案收敛的任务", "治标：只是错得更稳定，不是更对"],
+            ]}
+          />
+          <p className="mt-3 text-[14px] text-zinc-600">
+            实战是组合拳：RAG 供资料 + Prompt 立规矩 + 必要时 SFT 固行为，再配上引用溯源让用户能核查——「无法根除，只能缓解 + 兜底」这句话本身就是面试加分点。
+          </p>
+        </div>
       </Section>
 
       {/* Agent / Workflow / Skill / MCP */}
@@ -231,6 +246,36 @@ export default function Concepts() {
           <p className="mt-3 text-[14px] text-zinc-600">
             记住这张分层表：知识、接口、方法、决策，四层各管一段，拼起来才是企业里能用的 AI。
           </p>
+        </div>
+      </Section>
+
+      {/* Prompt 注入 */}
+      <Section kicker="03.5 · 安全" title="Prompt 注入：AI 时代的「SQL 注入」">
+        <div className="grid gap-4 md:grid-cols-2">
+          <TermCard term="Prompt 注入" en="Prompt Injection" tag="治理与安全岗必考">
+            <p>
+              攻击者把恶意指令混进模型能看到的内容里，诱导它忽略原本的设定、执行攻击者的意图。分两种：<span className="font-semibold text-zinc-800">直接注入</span>（用户在输入框里写「忽略你之前的所有指令……」）和
+              <span className="font-semibold text-zinc-800">间接注入</span>（恶意指令藏在网页、邮件、文档里，Agent 抓取或 RAG 检索时「吃下」中毒内容）。
+            </p>
+            <p className="mt-2">
+              为什么难防：<span className="font-semibold text-zinc-800">指令和数据走在同一条通道里</span>。对模型来说，老板的系统提示词和资料里的一句话都是文本，没有天然的权限高低之分——这是架构级难题，不是写几句防御话术能根治的。
+            </p>
+          </TermCard>
+          <TermCard term="纵深防御" en="Defense in Depth" tag="没有银弹，只能分层">
+            <p>
+              工业界的共识是分层拦截，每层降低一部分风险：<span className="font-semibold text-zinc-800">输入侧</span>（注入检测、可疑内容过滤）；<span className="font-semibold text-zinc-800">指令侧</span>（系统提示词明确权限边界，要求模型引用外部内容时保持警惕）；<span className="font-semibold text-zinc-800">架构侧</span>（不可信内容打标降权、工具调用白名单、高风险动作必须人工确认）；<span className="font-semibold text-zinc-800">输出侧</span>（敏感信息泄露检测）。
+            </p>
+            <p className="mt-2">
+              产品启示：做 AI 功能设计时，凡涉及「模型读取外部内容 + 调用工具执行动作」的组合，都要默认内容是敌对的来推演一遍——这正是治理策略类岗位的日常思维。
+            </p>
+          </TermCard>
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              面试用法：被问「怎么做 AI 内容安全/治理」时，用「直接/间接注入分类 + 四层纵深防御 + 没有银弹」作答，比背定义高一个段位。它和拒答边界（方法篇）是一对：拒答管「模型不该说什么」，注入防御管「模型不该听什么」。
+            </p>
+          </Note>
         </div>
       </Section>
 
@@ -516,6 +561,8 @@ export default function Concepts() {
             ["为什么模型 API 长对话越来越贵？", "无状态：每轮要把完整对话历史重发一遍，token 按输入输出计费"],
             ["LangGraph / Dify / Coze 怎么选？", "验证想法用 Dify/Coze，复杂状态机用 LangGraph，数据不出内网用 Dify 自部署"],
             ["分布式对 AI 意味着什么？", "算力与并发远超单机，服务的高可用与成本都建立在分布式之上"],
+            ["解决幻觉有哪四招？", "RAG 供资料、Prompt 立规矩、SFT 固行为、降温减随机——组合拳 + 溯源兜底，无法根除"],
+            ["Prompt 注入为什么难防？", "指令和数据同一通道，模型分不清「命令」和「资料」；只能输入/指令/架构/输出四层纵深防御"],
           ]}
         />
         <p className="mt-4 text-[14px] text-zinc-600">

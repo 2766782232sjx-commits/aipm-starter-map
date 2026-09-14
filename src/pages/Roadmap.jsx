@@ -20,6 +20,7 @@ const PHASES = [
       "收集 10 份 AI 产品经理 JD，自己做关键词词频统计——用数据确认市场要什么",
     ],
     deliver: "一份「AI 产品拆解笔记」+「JD 关键词统计表」",
+    check: "能向非技术朋友讲清楚：大模型为什么会一本正经地胡说（幻觉），以及 RAG 是怎么缓解它的",
   },
   {
     phase: "第 3~5 周",
@@ -31,6 +32,7 @@ const PHASES = [
       "做两组对比实验（混合检索、Rerank 或 Prompt 改版），记录前后数据",
     ],
     deliver: "知识问答 MVP + 评测报告（含对比数据）",
+    check: "拿到一个「答得不好」的 case，能说清问题出在检索还是生成，并给出下一步动作",
   },
   {
     phase: "第 6~8 周",
@@ -42,6 +44,7 @@ const PHASES = [
       "给 Agent 设计失败兜底策略，并记录典型 bad case",
     ],
     deliver: "一个可演示的 Agent 工作流 + bad case 复盘",
+    check: "面对一个新需求，能立刻判断「这个该用 Workflow 还是 Agent」并说出理由",
   },
   {
     phase: "第 9~10 周",
@@ -53,6 +56,7 @@ const PHASES = [
       "复盘这个过程中你对「AI Coding 产品设计」的新洞察——这就是最鲜活的产品思考素材",
     ],
     deliver: "一个能跑的小产品 + 协作过程复盘",
+    check: "能讲清一次 AI 翻车的完整过程：现象 → 定位 → 你的引导 → 结果，并提炼出产品启示",
   },
   {
     phase: "第 11~12 周",
@@ -65,6 +69,7 @@ const PHASES = [
       "找 2~3 位从业者（学长学姐、社区）做模拟面试或简历 review",
     ],
     deliver: "作品集 + 面试题库 + 模拟面试反馈",
+    check: "任意抽一道高频题，能在 90 秒内讲出「结论先行 + 框架 + 自己的项目佐证」",
   },
 ];
 
@@ -133,10 +138,62 @@ export default function Roadmap() {
                   {p.deliver}
                 </p>
               </div>
+              <div className="mt-3 rounded-lg bg-white/80 p-3">
+                <p className="text-xs font-semibold text-zinc-500">自测标准</p>
+                <p className="mt-1 text-[13px] font-medium leading-snug text-zinc-800">
+                  {p.check}
+                </p>
+              </div>
             </div>
           </div>
         </Section>
       ))}
+
+      <Section kicker="方法" title="学到哪里算够：灰盒型 PM 的深度边界">
+        <p className="max-w-3xl text-[15px] leading-relaxed text-zinc-600">
+          入门期最大的时间黑洞不是「学不会」，而是
+          <span className="font-semibold text-zinc-800">学过头</span>
+          ：一个概念刚明白，又扎进源码和公式里出不来。更好的定位是
+          <span className="font-semibold text-zinc-800">「灰盒型 PM」</span>
+          ——不把 AI 当完全不可理解的黑盒，也不把写代码、推公式当成目标。
+          判断要不要继续深入的唯一条标准：<span className="font-semibold text-zinc-800">这个技术细节会改变我的产品判断吗？</span>不会，就停。
+        </p>
+        <div className="mt-5">
+          <Table
+            head={["判断一个概念是否学会的六问", "示例：Function Calling"]}
+            rows={[
+              ["它是什么？", "模型输出「该调哪个工具、参数是什么」的结构化建议，由程序去真正执行"],
+              ["解决什么问题？", "让模型从「只会说」变成「能查、能算、能操作系统」"],
+              ["它在系统的哪个环节？", "模型输出与外部工具之间的协议层"],
+              ["它和相邻概念什么关系？", "是结构化输出的特例；是 Agent 能「做事」的基础机制"],
+              ["它不能解决什么？", "不保证工具本身是对的，也不保证模型选对了工具"],
+              ["什么情况下不该用它？", "答案模型已知、无需实时数据或外部动作的纯生成任务"],
+            ]}
+          />
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              六问都能用自己的话答上来，这个概念在 PM 层面就「毕业」了，继续深入交给工作需要。学习顺序上也有讲究：先建立整体地图，再吃透一次模型调用，然后 Prompt → 工具调用 → RAG → Agent → 评测，Memory、多 Agent、MoE 这类进阶主题按需后补——不要今天学提示词、明天研究模型架构，主线永远只有一条。
+            </p>
+          </Note>
+        </div>
+      </Section>
+
+      <Section kicker="练习" title="两个高杠杆的日常练习">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card title="逆向 PRD" icon={BookOpenText}>
+            <p>
+              挑一个你常用的 AI 产品功能（比如 Kimi 的长文档问答、豆包的语音通话），不看任何资料，倒推它的 PRD：目标用户是谁、核心场景是什么、背后大概用了什么技术方案（RAG？Function Calling？）、效果怎么评。写完再去找公开资料对答案。这是把「用过的产品」转化为「产品手感」最快的方式。
+            </p>
+          </Card>
+          <Card title="AI 产品观察清单" icon={Flag}>
+            <p>
+              每上手一个新 AI 产品，按固定三步记录：猜它的技术方案 → 猜它的商业模式 → 记一个你觉得设计得好或不好的细节。连续记一个月，你在面试里聊「最近关注的 AI 产品」时，会有别人没有的细节密度。
+            </p>
+          </Card>
+        </div>
+      </Section>
 
       <Section kicker="原则" title="贯穿 12 周的三条军规">
         <div className="grid gap-4 md:grid-cols-3">
