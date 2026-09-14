@@ -319,6 +319,12 @@ export default function Concepts() {
               <span className="font-semibold text-zinc-800">不可比、不可复现的评测等于没测</span>
               。Harness 保证同一张卷子、同一种考法、同一套阅卷标准。企业内部的「评测平台」本质上就是自建 Harness；看到任何跑分结论，先问一句「用的同一个 Harness 吗」。
             </p>
+            <div className="mt-3 rounded-lg bg-zinc-50 p-3 text-[12px] leading-relaxed text-zinc-600">
+              <p className="font-semibold text-zinc-700">一词两义，别搞混</p>
+              <p className="mt-1">
+                Harness 原义是马具——「套在模型外面的那层支架」。本页讲的是<strong>评测支架</strong>（跑考试）；近年还流行另一种用法 <strong>Agent Harness</strong>（工作支架）：包在模型外面的系统 Prompt、工具清单、循环与上下文管理——「同一个模型配不同 harness 表现天差地别」，Claude Code、Cursor 卖的一半是模型、一半是 harness。考试时它是考试支架，干活时它是工作支架，指的都是「模型之外那层东西」。
+              </p>
+            </div>
           </TermCard>
         </div>
         <div className="mt-6">
