@@ -5,6 +5,7 @@ import {
   FileCheck2,
   Sparkles,
   AlertTriangle,
+  Building2,
 } from "lucide-react";
 import {
   Layout,
@@ -122,12 +123,46 @@ export default function Career() {
       </Section>
 
       {/* 面试题 */}
-      <Section kicker="04 · 实战" title="高频面试题自测">
+      {/* 歧义题拆解 */}
+      <Section kicker="04 · 拆解" title="「你怎么评价各家 AI」——一道故意模糊的题">
+        <p className="max-w-3xl text-[15px] leading-relaxed text-zinc-600">
+          面试官问「你怎么评价这几家 AI」时很少说明指的是产品还是模型——<span className="font-semibold text-zinc-800">歧义本身就是考点</span>：看你能不能把模糊问题结构化。急着选边报参数是下策，高分开口是：「这个问题我习惯分两层看，模型层和产品层的评价标准完全不同。」
+        </p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <Card title="模型层：评价「发动机参数」" icon={Building2}>
+            <ul className="mt-1 space-y-2">
+              <li>· 能力上限：看真实任务基准（长程任务完成率），不看聊天榜单</li>
+              <li>· 上下文长度、调用成本与速度</li>
+              <li>· 工具调用与结构化输出的可靠性</li>
+              <li>· 开源 vs 闭源、合规与私有化能力</li>
+            </ul>
+          </Card>
+          <Card title="产品层：评价「整车调校」" icon={Building2}>
+            <ul className="mt-1 space-y-2">
+              <li>· 目标用户与切入场景、交互范式（逐句聊 vs 给目标看结果）</li>
+              <li>· Harness 工程质量：同一模型配不同产品壳，体验天差地别</li>
+              <li>· 数据飞轮：是否越用越懂你（记忆与个性化）</li>
+              <li>· 商业模式是否跑通、生态位（标准/分发/开发者绑定）</li>
+            </ul>
+          </Card>
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              90 秒示范：「模型层我只看真实任务完成率；产品层我看场景、harness 和数据飞轮。比如 Claude 模型层顶级，产品层选了编程与 Agent 工程化这条路，靠 Claude Code 和 MCP 建标准；豆包模型未必最强，但靠 C 端体验和分发建立心智——说明模型领先不等于产品赢。最后我认为两者的关系是<span className="font-semibold">模型可替换、产品难迁移</span>：好产品的设计是换模型体验不降，这正是 PM 的价值。」
+            </p>
+          </Note>
+        </div>
+      </Section>
+
+      {/* 实战 */}
+      <Section kicker="05 · 实战" title="高频面试题自测">
         <div className="mt-2">
           <Table
             head={["问题", "考察点", "答题骨架"]}
             rows={[
               ["怎么判断一个场景该不该上 AI？", "边界意识", "高频/容错/范式三因子 + 两个正反例"],
+              ["你怎么评价各家 AI？", "结构化模糊问题", "先拆模型层/产品层两套标准，再落到「模型可替换、产品难迁移」"],
               ["RAG 效果差，你怎么排查？", "工程手感", "先看检索（召回对不对）再看生成（Prompt 与模型），逐段定位"],
               ["怎么做模型/方案选型？", "权衡能力", "能力上限、成本、延迟、合规四个维度打分对比"],
               ["你的项目里最难的决定是什么？", "真实经历", "讲取舍（如体验 vs 成本），要有数据支撑"],
