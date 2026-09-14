@@ -386,6 +386,96 @@ export default function Concepts() {
         </div>
       </Section>
 
+      {/* VLM / SFT */}
+      <Section kicker="08 · 多模态与微调" title="VLM 与 SFT：给模型长眼睛、上补习班">
+        <div className="grid gap-4 md:grid-cols-2">
+          <TermCard term="VLM" en="Vision Language Model / 视觉语言模型" tag="多模态文档分析的发动机">
+            <p>
+              能同时「看」图和「读」文字的模型。结构上是给 LLM 加装了一个
+              <span className="font-semibold text-zinc-800">视觉编码器</span>
+              ：图片先被切成视觉 token，和文字 token 一起送进同一个 Transformer 理解。于是模型可以回答「这张截图里按钮在哪」「这张表的第三行销售额是多少」。代表选手：GPT-4o、Claude、Qwen-VL。
+            </p>
+            <p className="mt-2">
+              对 PM 的意义：<span className="font-semibold text-zinc-800">多模态文档分析</span>这条产品线的地基——合同里扫描的公章、研报里的图表、发票照片、界面截图，过去要 OCR 转文字（表格结构全丢），现在 VLM 直接读图理解。面试聊「知识库里全是 PDF 扫描件怎么办」，答案就是这条路。
+            </p>
+          </TermCard>
+          <TermCard term="SFT" en="Supervised Fine-Tuning / 监督微调" tag="用示例给模型补课">
+            <p>
+              拿一批「标准问 + 标准答」的示例数据继续训练模型，让它的行为向示例靠拢。与它配套的还有 RLHF（用人类偏好打分调对齐）。微调改的是模型的
+              <span className="font-semibold text-zinc-800">行为习惯</span>：语气、格式、风格、对某类任务的套路。
+            </p>
+            <div className="mt-3 rounded-lg bg-zinc-50 p-3 text-[12px] leading-relaxed text-zinc-600">
+              <p className="font-semibold text-zinc-700">Prompt / RAG / SFT 怎么选（高频面试题）</p>
+              <p className="mt-1">知识性的问题 → RAG（知识天天变，微调追不上）；行为格式的问题 → SFT（要 1000+ 条稳定风格时用）；先试 Prompt，Prompt 写不出的稳定行为再上微调。微调「记住」的内容会过时且难删除——这是它和 RAG 最本质的分工。</p>
+            </div>
+          </TermCard>
+        </div>
+      </Section>
+
+      {/* API / Function Calling / Postman */}
+      <Section kicker="09 · 接口" title="API、Function Calling 与结构化输出：模型怎么和外界对话">
+        <div className="grid gap-4 md:grid-cols-2">
+          <TermCard term="API 交互" en="应用程序接口" tag="PM 的最小技术通识">
+            <p>
+              调一次模型 = 发一次 HTTP 请求：带着 API Key（鉴权）把一段 JSON 发给服务商的 endpoint，JSON 里写明 model、messages（对话历史）、temperature 等参数，对方回一段 JSON，里面是生成的文本和 token 用量。模型 API 是
+              <span className="font-semibold text-zinc-800">无状态</span>的——服务端不记你上次聊了什么，多轮对话靠客户端把完整历史每次都重新发一遍（所以长对话 token 越滚越贵）。
+            </p>
+            <p className="mt-2">
+              PM 要懂的四个边界：按 token 计费（输入输出分开计价）、上下文窗口上限、每分钟调用次数限流（RPM）、流式输出（打字机效果）vs 一次性返回。这四条直接决定你的产品体验设计和成本模型。
+            </p>
+          </TermCard>
+          <TermCard term="Function Calling 与结构化输出" en="函数调用" tag="从「聊天」到「执行」的桥梁">
+            <p>
+              关键认知：<span className="font-semibold text-zinc-800">模型自己不会执行任何函数</span>。它只是根据你的工具清单，输出一段结构化 JSON：「建议调用 get_weather，参数 city=北京」。真正的执行由程序完成，结果再回传给模型，模型用人话总结——循环可能多轮，这就是 Agent 工具的底层循环。
+            </p>
+            <p className="mt-2">
+              结构化输出（Structured Output）是同一思路：用 JSON Schema 约束模型必须输出合法格式的 JSON。它让模型从「写文章的」变成「填表的」——打标签、抽字段、打分、路由判断，一切要进程序下游的输出都该走结构化，否则一个多余标点就能让解析崩溃。
+            </p>
+          </TermCard>
+        </div>
+        <div className="mt-4">
+          <TermCard term="Postman 与 curl" en="接口联调的两把扳手" tag="PM 也得上手">
+            <p>
+              curl 是命令行里的一行请求，Postman 是图形化界面（能存请求收藏夹、切换环境变量、看历史）。它们是验证接口的工具——文档说接口能返回什么，亲手调一遍才算数。一次真实调用长这样：
+            </p>
+            <div className="mt-3 overflow-x-auto rounded-lg bg-zinc-900 p-3 font-mono text-[12px] leading-relaxed text-zinc-100">
+              <p>curl https://api.openai.com/v1/chat/completions \</p>
+              <p>&nbsp;&nbsp;-H "Authorization: Bearer sk-你的key" \</p>
+              <p>&nbsp;&nbsp;-H "Content-Type: application/json" \</p>
+              <p>&nbsp;&nbsp;-d '{'{'}"model":"gpt-4o","messages":[{'{'}"role":"user","content":"你好"{'}'}]'{'}'}'</p>
+            </div>
+            <p className="mt-3 text-[14px] leading-relaxed text-zinc-600">
+              PM 的三个用法：验证 API 文档与真实行为是否一致；定位问题归属（curl 直连正常但产品里报错 → 锅在接入层不在模型）；面试实操题「给你个 API 搭个小工具」时这是第一道工序。
+            </p>
+          </TermCard>
+        </div>
+      </Section>
+
+      {/* LangGraph / Dify / Coze */}
+      <Section kicker="10 · 平台" title="LangGraph、Dify、Coze：把想法拼起来的三条路">
+        <p className="max-w-3xl text-[15px] leading-relaxed text-zinc-600">
+          三者都能「把模型、工具、知识库拼成应用」，但抽象层级完全不同：一个给你代码框架，一个给你可视化工作流，一个给你插件生态。选型本质是
+          <span className="font-semibold text-zinc-800">自由度 vs 上线速度</span>的交换。
+        </p>
+        <div className="mt-5">
+          <Table
+            head={["平台", "定位与用法", "优势", "短板与适用"]}
+            rows={[
+              ["LangGraph", "代码级 Agent 编排框架（LangChain 家族），把 Agent 画成状态机图：节点=动作，边=流转条件", "控制粒度最细，复杂分支、循环、人机协同都能精确表达", "要写代码、要运维；适合工程师主导、逻辑复杂的核心系统"],
+              ["Dify", "开源低代码 LLM 应用平台：可视化拖拽工作流 + 知识库 + 一键发布 API，可私有化部署", "不写代码也能搭出能上线的产品，企业内网可自部署", "深度定制有天花板；适合 PM 快速验证、企业内部工具"],
+              ["Coze（扣子）", "字节出品的零代码 Bot 平台：插件商店 + 工作流 + 一键发布到抖音/飞书等渠道", "生态插件现成、分发渠道现成，个人创作者几分钟出作品", "平台绑定深、数据在云上；适合 C 端小工具和快速原型"],
+            ]}
+          />
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              选型口诀：验证想法用 Dify/Coze（小时级出活），逻辑复杂到拖拽摆不下再上 LangGraph，数据不能出内网选 Dify 自部署。三者不是互斥——很多团队是 Coze 试错、Dify 上线、LangGraph 承载核心链路。你的 RAG 评测实验室走的就是 Dify 路线。
+            </p>
+          </Note>
+        </div>
+      </Section>
+
       {/* 概念自测 */}
       <Section kicker="自测" title="3 分钟自测：你能复述吗">
         <Table
@@ -398,6 +488,11 @@ export default function Concepts() {
             ["Agent 和 Workflow 的本质区别？", "决策权在模型还是人：灵活 vs 可控，实践中常混搭"],
             ["MCP 的价值是什么？", "把工具接入门槛从 N×M 次开发降到 N+M 次（标准化插头）"],
             ["为什么评测要用 LLM 当裁判？", "开放式产出没有标准答案，人工评贵且慢，LLM 评分可规模化，但要防偏置"],
+            ["VLM 解决了知识库的什么痛点？", "扫描件/图表/截图不用 OCR 硬转文字，视觉编码器让模型直接读图理解"],
+            ["知识型问题和行为型问题分别怎么解？", "知识用 RAG（可变、可溯源），行为用 SFT（稳定风格格式）；先 Prompt，不行再微调"],
+            ["Function Calling 是模型在执行函数吗？", "不是——模型只输出「调什么、参数是什么」的 JSON，执行在程序侧，结果回传再总结"],
+            ["为什么模型 API 长对话越来越贵？", "无状态：每轮要把完整对话历史重发一遍，token 按输入输出计费"],
+            ["LangGraph / Dify / Coze 怎么选？", "验证想法用 Dify/Coze，复杂状态机用 LangGraph，数据不出内网用 Dify 自部署"],
             ["分布式对 AI 意味着什么？", "算力与并发远超单机，服务的高可用与成本都建立在分布式之上"],
           ]}
         />

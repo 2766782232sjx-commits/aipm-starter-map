@@ -5,6 +5,7 @@ import {
   GitBranch,
   Boxes,
   Coins,
+  Wrench,
 } from "lucide-react";
 import {
   Layout,
@@ -24,7 +25,7 @@ export default function Methods() {
       <PageHeader
         eyebrow="方法篇"
         title="动手方法论"
-        desc="概念是地图，方法是腿。这一篇讲四件 AIPM 的看家本领：把 Prompt 写明白、把评测建起来、把知识库搭起来、算清 AI 的成本账——每件事都给到可以直接照做的步骤。"
+        desc="概念是地图，方法是腿。这一篇讲 AIPM 的看家本领：把 Prompt 写明白、把评测建起来、把知识库搭起来、算清成本账，以及决定线上效果的工程细节——召回、拒答、溯源、切片、触发与工具描述。每件事都给到可以直接照做的步骤。"
       />
 
       {/* Prompt Engineering */}
@@ -191,13 +192,109 @@ export default function Methods() {
             head={["类别", "代表工具", "一句话认知"]}
             rows={[
               ["模型 API", "OpenAI、Anthropic、Google、阿里通义、DeepSeek、Kimi、豆包", "最常用的发动机；国内出海选型时成本与合规是关键变量"],
-              ["Agent / 编排框架", "LangChain、LlamaIndex、AutoGen、Dify、Coze", "把模型、工具、记忆拼成应用的脚手架；低代码平台适合快速验证"],
+              ["Agent / 编排框架", "LangChain、LangGraph、LlamaIndex、Dify、Coze", "把模型、工具、记忆拼成应用的脚手架；三者选型对比见概念篇第 10 节"],
               ["向量数据库", "Milvus、Pinecone、Qdrant、PGVector", "RAG 的仓库；选型看规模、运维成本与混合检索支持"],
               ["AI Coding", "Cursor、Claude Code、GitHub Copilot、Windsurf", "PM 也该亲自用：理解 AI 协作的交互范式，本身就是产品研究"],
               ["评测工具", "Ragas、DeepEval、OpenAI Evals", "把评测流水线自动化；自建脚本也完全可行"],
               ["文档与知识", "飞书/语雀知识库 + 自建 RAG", "先治理内容，再上检索——顺序反了效果必然差"],
             ]}
           />
+        </div>
+      </Section>
+
+      {/* 效果质量 */}
+      <Section kicker="06 · 质量" title="效果三连：召回率、拒答边界与引用溯源">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card title="召回率：漏斗的第一关" icon={Database}>
+            <p>
+              召回率 = 该被找到的资料里，有多少真的被检索出来了。它是整条 RAG 链路的
+              <span className="font-semibold text-zinc-800">上限开关</span>
+              ：召回漏了，后面 rerank 再准、模型再聪明也救不回来——资料根本没到模型手里。记住这句话：
+              <span className="font-semibold text-zinc-800">召回定上限，生成定下限</span>
+              。
+            </p>
+            <p className="mt-2">
+              怎么测：构造测试集，每题标注「该被召回的目标切片」，跑 recall@k（目标切片是否进了 top-k）。怎么提：切片质量（最常被低估）、混合检索（向量+关键词 BM25）、query 改写与多路召回。注意 rerank 只提升排序精度，救不了根本没召回的漏网之鱼。
+            </p>
+          </Card>
+          <Card title="拒答边界：三条线，一条都不能含糊" icon={ClipboardCheck}>
+            <ul className="mt-1 space-y-2">
+              <li>· <span className="font-semibold text-zinc-800">领域线</span>：问题不在知识库范围内 → 明说「我不知道」，绝不硬编</li>
+              <li>· <span className="font-semibold text-zinc-800">置信线</span>：检索相关度分数低于阈值 → 拒答或转人工，而非拿弱相关资料硬答</li>
+              <li>· <span className="font-semibold text-zinc-800">风险线</span>：医疗/法律/资金等高危问题 → 固定话术 + 转人工通道</li>
+            </ul>
+            <p className="mt-2">
+              认知校准：拒答不是失败——<span className="font-semibold text-zinc-800">一次幻觉的代价远大于十次拒答</span>。但拒答也要设计：给原因、给出处、给下一步（转人工/换问法），并监控两个指标的此消彼长：拒答率与误拒率（把该答的也拒了）。
+            </p>
+          </Card>
+          <Card title="引用溯源：信任是展示出来的" icon={GitBranch}>
+            <p>
+              做法分三层：入库时每个切片带上元数据（文档名、章节、更新时间）；生成时 Prompt 强制「每个论点标注来源编号 [1][2]」；前端把编号做成可点击的引用标记，跳转到原文对应位置。
+            </p>
+            <p className="mt-2">
+              三个价值：用户敢信（能核对）、出错能追责（定位到具体文档版本）、运营能修（哪篇文档在误导一目了然）。一个坑：模型可能标错出处编号，要定期抽检「引用-原文」一致性，这也是评测集里该有的一类题。
+            </p>
+          </Card>
+          <Card title="多模态文档：表格、图片、扫描件怎么办" icon={Boxes}>
+            <p>
+              表格：<span className="font-semibold text-zinc-800">整体保留不拆开</span>，转成 Markdown 或 HTML 表格保住行列结构，切片时加一段文字说明「这是关于什么的表」。图片与扫描件两条路：OCR 转纯文本（便宜，但图表信息全丢）；或 VLM 直接读图理解（贵，但能回答「图 3 的趋势是什么」）。
+            </p>
+            <p className="mt-2">
+              折中方案也常用：给每张图生成一段 caption（图说）入库，检索命中 caption 后再把原图喂给 VLM 作答。判断值不值得上 VLM：看你库里图表密度——研报、PPT、专利图纸类值得，纯文字制度文档不值得。
+            </p>
+          </Card>
+        </div>
+      </Section>
+
+      {/* 工程细节 */}
+      <Section kicker="07 · 工程" title="切片、触发与工具描述：决定效果的脏活">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card title="知识清洗与切片：怎么做、怎么判断好不好" icon={Database}>
+            <p>
+              清洗动作清单：去页眉页脚、去目录水印、OCR 纠错、全库去重、还原标题层级与列表结构。切片三种策略：
+              <span className="font-semibold text-zinc-800">固定长度+重叠</span>（简单但会拦腰斩断语义）、
+              <span className="font-semibold text-zinc-800">按标题递归切</span>（主流做法，顺着文档结构走）、
+              <span className="font-semibold text-zinc-800">语义切片</span>（按 Embedding 相似度找边界，效果好但贵）。切片太大稀释检索精度，太小断章取义。
+            </p>
+            <p className="mt-2">
+              怎么判断好不好——别拍脑袋，两招量化：肉眼抽看 20 个切片的「断义率」（有多少片段离开上下文读不懂）；更重要的是建召回测试集，用 recall@k 数字说话，改一次切片策略就重测一次。这正是你 RAG 评测实验室 B 组实验（512→1024）在量化的事。
+            </p>
+          </Card>
+          <Card title="Workflow 还是 Agent：决策边界的判断树" icon={GitBranch}>
+            <p>
+              判断顺序：步骤能否事先枚举？容错要求高不高？
+              <span className="font-semibold text-zinc-800">路径固定+零容错 → Workflow</span>（报销审批、固定流程的客服工单）；
+              <span className="font-semibold text-zinc-800">路径开放+可试错 → Agent</span>（「帮我调研这个竞对」）。拿不准就混合：主干 Workflow 保证可控兜底，叶子节点放 Agent 处理开放子任务。
+            </p>
+            <p className="mt-2">
+              评估口径也不同：Workflow 看完成率与每步耗时（确定性系统）；Agent 看任务成功率曲线、平均步数、人工接管率（概率性系统）。面试被问「这个场景用 Agent 还是 Workflow」，先把这两个问题抛回去，就是专业答案。
+            </p>
+          </Card>
+          <Card title="Skill / 工作流的触发条件：description 就是触发器" icon={PenLine}>
+            <p>
+              触发本质是路由问题：用户这句话该不该进这个 Skill？三种实现：规则关键词（快但脆）、意图分类模型（准但要训）、LLM 判别（灵活但要防误判）。无论哪种，
+              <span className="font-semibold text-zinc-800">Skill 的 description 文本本身就是路由器的判断依据</span>
+              ——写得好不好直接决定触发准不准。
+            </p>
+            <p className="mt-2">
+              监控两个指标：误触发率（不该来的进来了，浪费调用还抢答）与漏触发率（该来的没来，用户掉进兜底）。上线前用「边界问法测试集」验证：专门构造那些处在两个 Skill 交界处的问法。
+            </p>
+          </Card>
+          <Card title="工具描述怎么写，模型才不会错调" icon={Wrench}>
+            <p>
+              模型选工具时只看你的 name 和 description——这是它唯一的「招聘启事」。写法四要素：
+              <span className="font-semibold text-zinc-800">何时用 + 何时不用 + 参数约束 + 返回什么</span>
+              。name 用动词开头（query_weather 而非 weather）。
+            </p>
+            <div className="mt-3 rounded-lg bg-zinc-50 p-3 text-[12px] leading-relaxed text-zinc-600">
+              <p className="font-semibold text-zinc-700">反例 vs 正例</p>
+              <p className="mt-1">✗ 「查询天气」——模型可能在用户说「今天真冷」时也触发</p>
+              <p className="mt-1">✓ 「查询未来 7 天天气预报。仅在用户明确要求查天气时调用；不回答历史天气；city 为必填城市名；返回逐日温度与降水」</p>
+            </div>
+            <p className="mt-3 text-[14px] leading-relaxed text-zinc-600">
+              进阶三条：功能重叠的工具在描述里写明互斥边界；参数给 1~2 个调用示例（few-shot）；上线前跑一遍「错调测试集」——故意说容易误解的话，看模型会不会乱调。Skill 已是企业落地刚需，这份描述就是你的接口契约。
+            </p>
+          </Card>
         </div>
       </Section>
     </Layout>

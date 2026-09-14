@@ -7,6 +7,7 @@ import {
   BriefcaseBusiness,
   Route,
   LibraryBig,
+  FlaskConical,
 } from "lucide-react";
 
 export const NAV = [
@@ -17,6 +18,7 @@ export const NAV = [
   { to: "/career", label: "求职篇", icon: BriefcaseBusiness },
   { to: "/roadmap", label: "学习路径", icon: Route },
   { to: "/resources", label: "资源导航", icon: LibraryBig },
+  { to: "/practice", label: "实操室", icon: FlaskConical },
 ];
 
 export function Layout({ children }) {

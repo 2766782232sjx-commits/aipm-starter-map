@@ -5,6 +5,7 @@ import Industry from "@/pages/Industry.jsx";
 import Career from "@/pages/Career.jsx";
 import Roadmap from "@/pages/Roadmap.jsx";
 import Resources from "@/pages/Resources.jsx";
+import Practice from "@/pages/Practice.jsx";
 
 export const PAGES = {
   "01-首页": Index,
@@ -14,4 +15,5 @@ export const PAGES = {
   "05-求职篇": Career,
   "06-学习路径": Roadmap,
   "07-资源导航": Resources,
+  "08-实操室": Practice,
 };

@@ -6,6 +6,7 @@ import Industry from "./pages/Industry.jsx";
 import Career from "./pages/Career.jsx";
 import Roadmap from "./pages/Roadmap.jsx";
 import Resources from "./pages/Resources.jsx";
+import Practice from "./pages/Practice.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -52,5 +53,11 @@ export const navItems = [
     to: "/resources",
     icon: <Compass className="h-4 w-4" />,
     page: <Resources />,
+  },
+  {
+    title: "Practice",
+    to: "/practice",
+    icon: <Compass className="h-4 w-4" />,
+    page: <Practice />,
   },
 ];
