@@ -244,6 +244,27 @@ export default function Methods() {
             </p>
           </Card>
         </div>
+        <div className="mt-4">
+          <div className="rounded-xl border border-zinc-200 bg-white p-5">
+            <p className="text-sm font-semibold text-zinc-800">RAG 效果漏斗：每一层都在「漏」，召回率量的是第一道</p>
+            <div className="mt-4 space-y-2">
+              {[
+                ["知识库全部切片（如 5000 段）", "100%", "bg-zinc-100 text-zinc-700"],
+                ["初步召回 top-50（向量+关键词）", "62%", "bg-indigo-50 text-indigo-700"],
+                ["Rerank 重排 top-5", "34%", "bg-indigo-100 text-indigo-800"],
+                ["塞进 Prompt 的参考资料", "18%", "bg-indigo-200 text-indigo-900"],
+                ["最终答案（只能基于这几段）", "8%", "bg-indigo-500 text-white"],
+              ].map(([label, w, cls]) => (
+                <div key={label} className={`rounded-lg px-3 py-2 text-[12px] font-medium ${cls}`} style={{ width: w }}>
+                  {label}
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-[12px] leading-relaxed text-zinc-500">
+              目标切片如果第一关就没进 top-50，后面几层再好也接触不到它——这就是「召回定上限」的图示。recall@k 量的正是第一道闸口的漏网率；Rerank 只能让「已捞上来的」排得更准，捞不上来的它无能为力。
+            </p>
+          </div>
+        </div>
       </Section>
 
       {/* 工程细节 */}
@@ -295,6 +316,30 @@ export default function Methods() {
               进阶三条：功能重叠的工具在描述里写明互斥边界；参数给 1~2 个调用示例（few-shot）；上线前跑一遍「错调测试集」——故意说容易误解的话，看模型会不会乱调。Skill 已是企业落地刚需，这份描述就是你的接口契约。
             </p>
           </Card>
+        </div>
+        <div className="mt-4">
+          <div className="rounded-xl border border-zinc-200 bg-white p-5">
+            <p className="text-sm font-semibold text-zinc-800">Workflow 还是 Agent：两个问题的判断树</p>
+            <div className="mt-4 grid gap-2 text-[12px] font-medium md:grid-cols-2">
+              <div className="rounded-lg border border-zinc-200 p-3">
+                <p className="text-zinc-800">问题 1：任务步骤能事先枚举吗？</p>
+                <div className="mt-2 space-y-1.5 text-zinc-600">
+                  <p>能（流程固定）→ 进入问题 2</p>
+                  <p>不能（路径开放）→ <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-indigo-700">用 Agent</span>，如「帮我调研这个竞对」</p>
+                </div>
+              </div>
+              <div className="rounded-lg border border-zinc-200 p-3">
+                <p className="text-zinc-800">问题 2：容错要求高吗？</p>
+                <div className="mt-2 space-y-1.5 text-zinc-600">
+                  <p>零容错（钱、合规）→ <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-700">用 Workflow</span>，如报销审批</p>
+                  <p>可试错 → <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-indigo-700">用 Agent</span>，失败可重试</p>
+                </div>
+              </div>
+            </div>
+            <p className="mt-3 text-[12px] leading-relaxed text-zinc-500">
+              拿不准的混合场景 → 主干 Workflow（保证可控与兜底）+ 叶子节点 Agent（处理开放子任务）。这是企业落地最常见的形态。
+            </p>
+          </div>
         </div>
       </Section>
     </Layout>

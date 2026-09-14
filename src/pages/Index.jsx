@@ -124,10 +124,6 @@ export default function Index() {
           <Card title="非技术背景不是劣势，是差异化" icon={BrainCircuit}>
             <p>
               零基础起步的人往往带着两样 AI 产品最缺的东西：对用户真实处境的敏感、把模糊需求讲清楚的表达能力，以及对内容质量与风险的直觉。技术概念是可以补课的（这座站就是干这个的），而这些对业务和人的理解很难速成。
-              <span className="font-semibold text-zinc-800">
-                你的策略不是先变成半个工程师，而是成为「最懂技术的那类业务选手」
-              </span>
-              。
             </p>
           </Card>
         </div>

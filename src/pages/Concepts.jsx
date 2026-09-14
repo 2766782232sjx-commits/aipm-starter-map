@@ -108,9 +108,6 @@ export default function Concepts() {
             <p>
               不需要会推导数学公式。你需要的是：当工程师说「这个幻觉是模型固有行为，不上 RAG 压不住」，你能听懂并接上话。
             </p>
-            <p className="mt-2">
-              术语约定：Transformer、LLM、RAG、Agent 这些业界通用名直接用英文，不做硬翻译。注意 LLM = Large Language Model（大语言模型），和法学硕士 LL.M.（Master of Laws）只是缩写撞车，毫无关系。也不要望文生义：产品语境里 goal / objective / target 都是「目标」（不是足球的球门），alignment 是「对齐」（让模型行为符合人类意图），eval 是「评测」（不是邪恶的 evil）。
-            </p>
           </Note>
         </div>
       </Section>
@@ -448,6 +445,25 @@ export default function Concepts() {
               PM 的三个用法：验证 API 文档与真实行为是否一致；定位问题归属（curl 直连正常但产品里报错 → 锅在接入层不在模型）；面试实操题「给你个 API 搭个小工具」时这是第一道工序。
             </p>
           </TermCard>
+        </div>
+        <div className="mt-4">
+          <div className="rounded-xl border border-zinc-200 bg-white p-5">
+            <p className="text-sm font-semibold text-zinc-800">一图看懂 Function Calling 循环（模型只「建议」，程序才「执行」）</p>
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-[12px] font-medium">
+              <span className="rounded-full border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-zinc-700">用户提问「北京明天天气？」</span>
+              <span className="text-zinc-300">→</span>
+              <span className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-indigo-700">模型输出 JSON：调用 get_weather(city=北京)</span>
+              <span className="text-zinc-300">→</span>
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-700">程序真正调用天气 API</span>
+              <span className="text-zinc-300">→</span>
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-700">结果回传给模型</span>
+              <span className="text-zinc-300">→</span>
+              <span className="rounded-full border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-zinc-700">模型用人话总结「明天晴，18~26℃」</span>
+            </div>
+            <p className="mt-3 text-[12px] leading-relaxed text-zinc-500">
+              如果模型拿到结果后判断还需要别的信息（比如再查穿衣指数），会再输出一次调用 JSON——这个循环可以转多轮，直到模型认为可以作答为止。Agent 的「工具调用循环」就是这张图的不断重复。
+            </p>
+          </div>
         </div>
       </Section>
 

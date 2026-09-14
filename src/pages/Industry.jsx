@@ -20,7 +20,7 @@ export default function Industry() {
       <PageHeader
         eyebrow="行业篇"
         title="产业坐标系"
-        desc="聊行业是 AIPM 面试的必考题。你不需要知道所有细节，但要有自己的坐标系：模型公司格局怎么看、AI 产品经历了几波形态、工具生态怎么分层。信息截至 2025 年中，请在面试前自行更新到最新动态。"
+        desc="聊行业是 AIPM 面试的必考题。你不需要知道所有细节，但要有自己的坐标系：模型公司格局怎么看、AI 产品经历了几波形态、各家实践到了什么水平、前沿正在啃哪些硬骨头。"
       />
 
       {/* 模型公司 */}
@@ -60,7 +60,7 @@ export default function Industry() {
         <div className="mt-4">
           <Note>
             <p>
-              值得持续追踪的三个趋势：推理能力（o1 式「慢思考」模型把回答变成推理过程）、多模态统一（文本/图像/视频一个模型）、以及 Agent 化（模型从「回答问题」转向「完成任务」——对应本站概念篇的 Agent 章节）。
+              值得持续追踪的三个趋势：推理模型已成旗舰标配（「慢思考」从卖点变成默认能力）、Computer Use（模型直接操作真实软件完成长流程任务）、以及 Agent 后训练（行业开始寻找 Agent 时代的 Scaling Law——详见本页「前沿难题」一节）。
             </p>
           </Note>
         </div>
@@ -128,8 +128,83 @@ export default function Industry() {
         </div>
       </Section>
 
+      {/* 企业实践 */}
+      <Section kicker="04 · 实践" title="各家企业的真实实践与水平坐标">
+        <p className="max-w-3xl text-[15px] leading-relaxed text-zinc-600">
+          面试聊「你了解哪些公司」时，报菜名是下策，说出<span className="font-semibold text-zinc-800">每家在干什么、处于什么水平</span>才是上策。判断一家企业 AI 水平看三件事：旗舰模型在真实任务基准（不是聊天榜单）上的位置、有没有自己定义的行业标准、Agent 是否进入了真实生产流程。
+        </p>
+        <div className="mt-5">
+          <Table
+            head={["企业", "当前在做什么（实践）", "水平坐标"]}
+            rows={[
+              ["OpenAI", "GPT-6 Astra（2026.9）：105 万 token 上下文、Computer Use 长流程操作；真实电脑环境多步任务基准 Agents' Last Exam 得分 59.3% 暂居第一；Codex 编程 Agent 配「跨上下文工作笔记」机制", "前沿旗舰：长程 Agent 方向的行业领跑"],
+              ["Anthropic", "Claude Opus 5 + Claude Code 编程 Agent；主导的 MCP 协议成为工具接入行业标准；Agents' Last Exam 55.5%", "编程与 Agent 工程化口碑最强，标准制定者"],
+              ["Google", "Gemini 系列，多模态能力与搜索/办公生态深度整合", "第一梯队，生态整合最深"],
+              ["DeepSeek", "开源推理模型性价比路线的旗手，训练成本控制成行业标杆", "开源阵营头号选手"],
+              ["阿里", "通义千问 Qwen 开源生态；HSCodeComp 研究（ACL 2026 最佳资源论文）首次量化 Agent 的「专家级能力鸿沟」", "开源生态 + 产业研究双强"],
+              ["字节跳动", "豆包 C 端助手 + Coze 扣子平台 + 电商场景 AI 治理体系", "应用生态与分发最强，场景纵深"],
+              ["蚂蚁集团", "百灵大模型，Agent 后训练产业化实践（2026 外滩大会分享）", "金融等高门槛场景的纵深代表"],
+            ]}
+          />
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              一个观察：第一梯队的竞争焦点已经从「聊天体验」整体转向「真实任务完成率」。看这个转移，比盯跑分榜单更能判断行业水位。
+            </p>
+          </Note>
+        </div>
+      </Section>
+
+      {/* 前沿难题 */}
+      <Section kicker="05 · 前沿" title="前沿正在攻克的难题（面试高级感来源）">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card title="长程 Agent 的可靠性" icon={Rocket}>
+            <p>
+              任务步数越多，成功率指数衰减——最强的旗舰模型在 Agents' Last Exam（真实电脑环境里跨软件完成多步任务）也只做到约
+              <span className="font-semibold text-zinc-800"> 59%</span>
+              ，离「放心托管」还很远。攻克方向：上下文机制改造（工作笔记取代一次性摘要压缩）、执行中自我检查与回滚。
+            </p>
+          </Card>
+          <Card title="Agent 后训练与自我进化" icon={Rocket}>
+            <p>
+              2026 外滩大会的核心议题：Agent Post-Training，寻找 Agent 时代的 Scaling Law——让 Agent 在真实环境中完成任务、积累经验、自我进化。瓶颈不在模型而在<span className="font-semibold text-zinc-800">环境构建、结果验证、防奖励作弊（reward hacking）</span>：环境之于 Agent，如同数据之于模型。
+            </p>
+          </Card>
+          <Card title="专家级能力鸿沟" icon={Rocket}>
+            <p>
+              阿里 HSCodeComp 基准：让最强的 Deep Search Agent 做海关编码归类（十年专家 95% 正确率），最好的系统只有
+              <span className="font-semibold text-zinc-800"> 49.4%</span>
+              ——面对人类专家编写的层级规则，先进 Agent 集体失灵。垂直专家场景是通用 Agent 的下一座大山，也是垂直 PM 的机会。
+            </p>
+          </Card>
+          <Card title="Computer Use 与界面理解" icon={Rocket}>
+            <p>
+              让模型直接操作真实软件：界面理解基准 ScreenSpot-Pro 一年内从 76.9% 跳到 92.7%，但跨软件长流程仍脆。另一条路线的思路反过来——不是教 AI 学人类界面，而是<span className="font-semibold text-zinc-800">让软件原生适配 Agent</span>（把专业软件包装成命令行接口，如 CLI-Anything 的探索）。
+            </p>
+          </Card>
+          <Card title="长期记忆与个性化" icon={Rocket}>
+            <p>
+              「谁更懂你谁留存更高」——跨会话长期记忆是 Agent 产品的竞争焦点，但记忆的写入策略（什么值得记）、更新与遗忘（过期信息怎么清）、隐私边界（用户能不能查看和删除记忆）都还没有行业共识。
+            </p>
+          </Card>
+          <Card title="推理成本与效率" icon={Rocket}>
+            <p>
+              长程 Agent 单次任务消耗巨量上下文与 KV cache 存储；「循环深度」等新推理架构在探索中。成本结构决定哪些场景商业化跑得通——这也是为什么「单位经济模型」成了 AI PM 的必修课（方法篇成本一节）。
+            </p>
+          </Card>
+        </div>
+        <div className="mt-4">
+          <Note>
+            <p>
+              面试被问「你怎么看 Agent 落地前景」时，用两个数字校准乐观：真实电脑多步任务最强模型约 59%，专家级垂直任务约 49%（人类专家 95%）。既看得到方向，又说得出差距——这比空谈「未来已来」高级得多。
+            </p>
+          </Note>
+        </div>
+      </Section>
+
       {/* 怎么追 */}
-      <Section kicker="04 · 习惯" title="保持行业敏感的日常习惯">
+      <Section kicker="06 · 习惯" title="保持行业敏感的日常习惯">
         <div className="grid gap-4 md:grid-cols-2">
           <Card title="信息源" icon={Map}>
             <ul className="mt-1 space-y-2">
