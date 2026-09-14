@@ -108,6 +108,9 @@ export default function Concepts() {
             <p>
               不需要会推导数学公式。你需要的是：当工程师说「这个幻觉是模型固有行为，不上 RAG 压不住」，你能听懂并接上话。
             </p>
+            <p className="mt-2">
+              术语约定：Transformer、LLM、RAG、Agent 这些业界通用名直接用英文，不做硬翻译。注意 LLM = Large Language Model（大语言模型），和法学硕士 LL.M.（Master of Laws）只是缩写撞车，毫无关系。也不要望文生义：产品语境里 goal / objective / target 都是「目标」（不是足球的球门），alignment 是「对齐」（让模型行为符合人类意图），eval 是「评测」（不是邪恶的 evil）。
+            </p>
           </Note>
         </div>
       </Section>
@@ -307,6 +310,17 @@ export default function Concepts() {
             </div>
             <p className="mt-3 text-[14px] leading-relaxed text-zinc-600">
               对策：盲测打乱顺序、按维度拆分打分、定期抽一部分人工复核校准。面试提一句「裁判本身也要被评测」，是加分细节。
+            </p>
+          </TermCard>
+          <TermCard term="Harness" en="评测跑分器 / 评测脚手架" tag="让分数可比、可复现的框架">
+            <p>
+              把「加载考题 → 拼装 Prompt → 调用模型 → 计算指标 → 输出报告」整条流程代码化固定下来的评测框架。知名开源实现有
+              <span className="font-semibold text-zinc-800"> lm-evaluation-harness</span>（社区事实标准）、HELM、OpenAI Evals 等。注意 Harness 本身不出题也不打分，它负责「按统一规则跑完全场」。
+            </p>
+            <p className="mt-2">
+              为什么必须有它：没有统一 Harness，每个人自己做题、自己拼 Prompt、自己算分，模型 A 用温度 0 跑、模型 B 用温度 0.9 跑，分数差异毫无意义——
+              <span className="font-semibold text-zinc-800">不可比、不可复现的评测等于没测</span>
+              。Harness 保证同一张卷子、同一种考法、同一套阅卷标准。企业内部的「评测平台」本质上就是自建 Harness；看到任何跑分结论，先问一句「用的同一个 Harness 吗」。
             </p>
           </TermCard>
         </div>

@@ -33,7 +33,7 @@ export function Layout({ children }) {
                 AIPM 入门地图
               </span>
               <span className="hidden rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] text-zinc-500 sm:inline">
-                人文社科转 AI 产品经理
+                零基础进阶 AI 产品经理
               </span>
             </Link>
             <nav className="hidden items-center gap-1 md:flex">
@@ -80,7 +80,7 @@ export function Layout({ children }) {
         <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-zinc-500">
           <p className="font-medium text-zinc-700">AIPM 入门地图</p>
           <p className="mt-1 leading-relaxed">
-            为人文社科背景的同学设计的 AI 产品经理入门知识站。内容整理自公开的招聘市场信号与主流技术资料，供学习参考，不构成任何求职或投资建议。
+            为零基础进阶 AI 产品经理的同学设计的知识站。内容整理自公开的招聘市场信号与主流技术资料，供学习参考，不构成任何求职或投资建议。
           </p>
         </div>
       </footer>
